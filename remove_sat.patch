@@ -1,0 +1,104 @@
+diff --git a/game/data_src/shaders_Mali/2d-sprite-alpha-masked.fx b/game/data_src/shaders_Mali/2d-sprite-alpha-masked.fx
+index 9c1cc0d..1412938 100644
+--- a/game/data_src/shaders_Mali/2d-sprite-alpha-masked.fx
++++ b/game/data_src/shaders_Mali/2d-sprite-alpha-masked.fx
+@@ -3,6 +3,5 @@
+ #define ENABLE_ALPHA_FACTOR
+ #define ENABLE_ALPHA_MASK
+ #define ENABLE_TWOSIDED
+-#define ENABLE_SATURATION_ADJUST
+ 
+-#include "pp.fx"
++#include "pp.fx"
+\ No newline at end of file
+diff --git a/game/data_src/shaders_Mali/2d-sprite-alpha.fx b/game/data_src/shaders_Mali/2d-sprite-alpha.fx
+index 854b24f..b5c2e92 100644
+--- a/game/data_src/shaders_Mali/2d-sprite-alpha.fx
++++ b/game/data_src/shaders_Mali/2d-sprite-alpha.fx
+@@ -2,6 +2,5 @@
+ #define ENABLE_PREMULT_ALPHA_BLENDING
+ #define ENABLE_ALPHA_FACTOR
+ #define ENABLE_TWOSIDED
+-#define ENABLE_SATURATION_ADJUST
+ 
+-#include "pp.fx"
++#include "pp.fx"
+\ No newline at end of file
+diff --git a/game/data_src/shaders_Mali/2d-sprite.fx b/game/data_src/shaders_Mali/2d-sprite.fx
+index f7dee61..4d8af16 100644
+--- a/game/data_src/shaders_Mali/2d-sprite.fx
++++ b/game/data_src/shaders_Mali/2d-sprite.fx
+@@ -1,5 +1,4 @@
+ #define DISABLE_DEPTH_TEST
+ #define ENABLE_TWOSIDED
+-#define ENABLE_SATURATION_ADJUST
+ 
+-#include "pp.fx"
++#include "pp.fx"
+\ No newline at end of file
+diff --git a/game/data_src/shaders_Mali/2d-vertexcolor-alpha.fx b/game/data_src/shaders_Mali/2d-vertexcolor-alpha.fx
+index aa619cc..e1fbe14 100644
+--- a/game/data_src/shaders_Mali/2d-vertexcolor-alpha.fx
++++ b/game/data_src/shaders_Mali/2d-vertexcolor-alpha.fx
+@@ -4,6 +4,5 @@
+ #define ENABLE_ALPHA_BLENDING
+ #define ENABLE_ALPHA_FACTOR
+ #define ENABLE_TWOSIDED
+-#define ENABLE_SATURATION_ADJUST
+ 
+-#include "pp.fx"
++#include "pp.fx"
+\ No newline at end of file
+diff --git a/game/data_src/shaders_Mali/2d-vertexcolor.fx b/game/data_src/shaders_Mali/2d-vertexcolor.fx
+index 0e7a01d..5a12578 100644
+--- a/game/data_src/shaders_Mali/2d-vertexcolor.fx
++++ b/game/data_src/shaders_Mali/2d-vertexcolor.fx
+@@ -2,6 +2,5 @@
+ #define ENABLE_VERTEXCOLOR
+ #define DISABLE_TEXTURE
+ #define ENABLE_TWOSIDED
+-#define ENABLE_SATURATION_ADJUST
+ 
+-#include "pp.fx"
++#include "pp.fx"
+\ No newline at end of file
+diff --git a/game/data_src/shaders_Mali/commons/uniforms.sh b/game/data_src/shaders_Mali/commons/uniforms.sh
+index 30282ce..669531d 100644
+--- a/game/data_src/shaders_Mali/commons/uniforms.sh
++++ b/game/data_src/shaders_Mali/commons/uniforms.sh
+@@ -30,7 +30,6 @@ uniform mediump vec4 TEX0_OFFSET;
+ uniform lowp float SHININESS;
+ uniform mediump float GLOSSINESS;
+ uniform lowp float ALPHA_FACTOR;
+-uniform mediump float COLOR_SATURATION;
+ 
+ uniform mediump float TIME;
+ 
+diff --git a/game/data_src/shaders_Mali/pixelShaders/pp.ps b/game/data_src/shaders_Mali/pixelShaders/pp.ps
+index 00c72d3..5d6d9f2 100644
+--- a/game/data_src/shaders_Mali/pixelShaders/pp.ps
++++ b/game/data_src/shaders_Mali/pixelShaders/pp.ps
+@@ -2,13 +2,6 @@
+ #include "../commons/uniforms.sh"
+ #include "../commons/varyings.sh"
+ 
+-mediump vec4 Desaturate(mediump vec4 color, mediump float saturation)
+-{
+-	mediump vec3 grayXfer = vec3(0.3, 0.59, 0.11);
+-	mediump vec3 gray = vec3(dot(grayXfer, color.rgb));
+-	return vec4(mix(gray, color.rgb, saturation), color.a);
+-}
+-
+ void main()
+ {
+ 
+@@ -43,9 +36,5 @@ void main()
+ 	color *= ALPHA_FACTOR;
+ #endif
+ 
+-#ifdef ENABLE_SATURATION_ADJUST
+-	color = Desaturate(color, COLOR_SATURATION);
+-#endif
+-
+ 	gl_FragColor = color;
+ }
